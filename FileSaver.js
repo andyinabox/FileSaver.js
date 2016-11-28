@@ -79,7 +79,7 @@ var saveAs = saveAs || (function(view) {
 			}
 			return blob;
 		}
-		, FileSaver = function(blob, name, no_auto_bom) {
+		, FileSaver = function(blob, name, no_auto_bom, callback) {
 			if (!no_auto_bom) {
 				blob = auto_bom(blob);
 			}
@@ -148,6 +148,9 @@ var saveAs = saveAs || (function(view) {
 					dispatch_all();
 					revoke(object_url);
 					filesaver.readyState = filesaver.DONE;
+					if(typeof callback === 'function'){
+					    callback();
+					}
 				});
 				return;
 			}
@@ -219,8 +222,8 @@ var saveAs = saveAs || (function(view) {
 			}), fs_error);
 		}
 		, FS_proto = FileSaver.prototype
-		, saveAs = function(blob, name, no_auto_bom) {
-			return new FileSaver(blob, name, no_auto_bom);
+		, saveAs = function(blob, name, no_auto_bom, callback) {
+			return new FileSaver(blob, name, no_auto_bom, callback);
 		}
 	;
 	// IE 10+ (native saveAs)
